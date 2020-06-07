@@ -21,6 +21,7 @@ const karmaSchema = new mongoose.Schema({
 });
 
 const quipSchema = new mongoose.Schema({
+  guildId: Number,
   quip: String,
 });
 

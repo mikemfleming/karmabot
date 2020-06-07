@@ -18,44 +18,41 @@ client.once('ready', () => {
 });
 
 client.on('message', async (message) => {
-  try {
-    const {
-      content,
-      channel: {
-        guild: {id: guildId},
-      },
-      mentions: {users: mentionedUsers},
-    } = message;
+  const {
+    content,
+    channel: {
+      guild: {id: guildId},
+    },
+    mentions: {users: mentionedUsers},
+  } = message;
 
-    // handle awarding of karma
-    if (isGivingKarmaRegex.test(content) && mentionedUsers.size > 0) {
-      const karmaToAdd = (content.match(/\+/g) || []).length;
+  // handle awarding of karma
+  if (isGivingKarmaRegex.test(content) && mentionedUsers.size > 0) {
+    const karmaToAdd = (content.match(/\+/g) || []).length;
 
-      const updatedKarmas = await karma.awardKarma({
-        karmaToAdd,
-        mentionedUsers,
-        guildId,
-        message,
-      });
+    const updatedKarmas = await karma.awardKarma({
+      karmaToAdd,
+      mentionedUsers,
+      guildId,
+      message,
+    });
 
-      updatedKarmas.forEach(({username, updatedKarma}) => message.channel.send(
-          `**${username}** now has ${updatedKarma} karma. Nice!`,
-      ));
+    const randomQuip = await quip.getRandomQuip(guildId);
 
-      return;
-    }
+    updatedKarmas.forEach(({username, updatedKarma}) => message.channel.send(
+        `**${username}** now has ${updatedKarma} karma. ${randomQuip}`,
+    ));
 
-    // handle adding of quips
-    if (isCreatingKarmaQuip.test(content)) {
-      const quipToCreate = content.replace(isCreatingKarmaQuip, '');
+    return;
+  }
 
-      await quip.createQuip(quipToCreate);
+  // handle adding of quips
+  if (isCreatingKarmaQuip.test(content)) {
+    const quipToCreate = content.replace(isCreatingKarmaQuip, '');
 
-      return message.channel.send('Created a quip!');
-    }
-  } catch (e) {
-    console.error(e);
-    message.channel.send(e.message);
+    await quip.createQuip(quipToCreate);
+
+    return message.channel.send('Created a quip!');
   }
 });
 
