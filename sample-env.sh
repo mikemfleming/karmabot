@@ -1,1 +1,0 @@
-export DISCORD_BOT_TOKEN=
