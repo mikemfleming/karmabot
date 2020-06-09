@@ -1,5 +1,5 @@
 .vscode
-build_output
+build
 .DS_Store
 node_modules
 env.sh

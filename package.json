@@ -4,15 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "source env.sh && nodemon index.ts",
-    "tsc": "tsc"
+    "dev": "source env.sh && backpack dev",
+    "build": "backpack build",
+    "typecheck": "tsc --pretty --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "backpack-core": "^0.8.4",
     "discord.js": "^12.2.0",
     "mongoose": "^5.9.18",
+    "ts-loader": "^7.0.5",
     "typescript": "^3.9.5"
   },
   "devDependencies": {
