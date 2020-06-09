@@ -4,7 +4,7 @@ A Discord bot for awarding karma to your friends.
 Add it to your Discord server [here](https://discord.com/oauth2/authorize?client_id=719188825053724703&scope=bot).
 
 # Whiteboard
-Karmabot is multiple instances of the app that are managed by pm2 on an ec2 server. The app initializes a connection with Discord and a MongoDB replica set on startup. It listens to messages from subscribed channels and executes bot logic based on what it recieves. 
+Karmabot is a single instance of the app managed by pm2 on an ec2 server. The app initializes a connection with Discord and a MongoDB replica set on startup. It listens to messages from subscribed channels and executes bot logic based on what it recieves. 
 
 Give karma by mentioning a user with as much karma as you want.
 ```
@@ -33,5 +33,5 @@ npm i
 npm run build
 
 # start 3 load balanced instances
-pm2 start build/main.js -i 3
+pm2 start build/main.js
 ```
