@@ -17,7 +17,29 @@ client.once('ready', () => {
   console.log('Ready!');
 });
 
-client.on('message', async (message) => {
+interface User {
+  username: string
+}
+
+interface Message {
+  content: string;
+  channel: {
+    guild: {
+      id: number
+    }
+    send: ((msg: string) => undefined)
+  }
+  mentions: {
+    users: Map<number, User>
+  }
+}
+
+interface UpdatedKarma {
+  username: string;
+  updatedKarma: number
+}
+
+client.on('message', async (message: Message) => {
   const {
     content,
     channel: {
@@ -30,7 +52,7 @@ client.on('message', async (message) => {
   if (isGivingKarmaRegex.test(content) && mentionedUsers.size > 0) {
     const karmaToAdd = (content.match(/\+/g) || []).length;
 
-    const updatedKarmas = await karma.awardKarma({
+    const updatedKarmas: UpdatedKarma[] = await karma.awardKarma({
       karmaToAdd,
       mentionedUsers,
       guildId,
