@@ -47,9 +47,12 @@ client.on('message', async (message: Message) => {
     },
     mentions: {users: mentionedUsers},
   } = message;
+  const isGivingKarma = isGivingKarmaRegex.test(content);
+  const isCreatingKarma = isCreatingKarmaQuip.test(content);
+
 
   // handle awarding of karma
-  if (isGivingKarmaRegex.test(content) && mentionedUsers.size > 0) {
+  if (isGivingKarma && mentionedUsers.size > 0) {
     const karmaToAdd = (content.match(/\+/g) || []).length;
 
     const updatedKarmas: UpdatedKarma[] = await karma.awardKarma({
@@ -63,19 +66,23 @@ client.on('message', async (message: Message) => {
 
     updatedKarmas.forEach(({username, updatedKarma}) => message.channel.send(
         `**${username}** now has ${updatedKarma} karma. ${randomQuip}`,
-    ));
-
-    return;
+    ));;
   }
 
   // handle adding of quips
-  if (isCreatingKarmaQuip.test(content)) {
+  if (isCreatingKarma) {
     const quipToCreate = content.replace(isCreatingKarmaQuip, '');
 
     await quip.createQuip(quipToCreate);
 
-    return message.channel.send('Created a quip!');
+    message.channel.send('Created a quip!');
   }
+
+  console.info('----------------------------------');
+  console.info('>> received message: %s', content);
+  console.info('>> giving karma: %b', isGivingKarma);
+  console.info('>> creating a quip: %b', isCreatingKarma);
+  console.info('>> users mentioned: %d', mentionedUsers.size);
 });
 
 client.login(DISCORD_BOT_TOKEN);
