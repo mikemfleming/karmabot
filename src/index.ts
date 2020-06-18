@@ -10,7 +10,7 @@ const quip = require('./quip');
 
 const client = new Discord.Client();
 
-const isGivingKarmaRegex = /<@\!\w*>\s\+*/g;
+const isGivingKarmaRegex = /<@\!\w*>\s\++/g;
 const isCreatingKarmaQuip = /^\!quip\s/g;
 
 client.once('ready', () => {
@@ -79,10 +79,10 @@ client.on('message', async (message: Message) => {
   }
 
   console.info('----------------------------------');
-  console.info('>> received message: %s', content);
-  console.info('>> giving karma: %b', isGivingKarma);
-  console.info('>> creating a quip: %b', isCreatingKarma);
-  console.info('>> users mentioned: %d', mentionedUsers.size);
+  console.info('>> received message:', content);
+  console.info('>> giving karma:', isGivingKarma);
+  console.info('>> creating a quip:', isCreatingKarma);
+  console.info('>> users mentioned:', mentionedUsers.size);
 });
 
 client.login(DISCORD_BOT_TOKEN);
