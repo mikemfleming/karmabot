@@ -25,5 +25,15 @@ const quipSchema = new mongoose.Schema({
   quip: String,
 });
 
+const linkSchema = new mongoose.Schema({
+  linkName: String,
+  guildId: Number,
+  linkHref: {
+    type: String,
+    validate: /^(https?):\/\/[^\s$.?#].[^\s]*$/
+  }
+});
+
 exports.Karma = mongoose.model('Karma', karmaSchema);
 exports.Quip = mongoose.model('Quip', quipSchema);
+exports.Link = mongoose.model('Link', linkSchema);

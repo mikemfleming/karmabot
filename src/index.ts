@@ -7,11 +7,14 @@ const {DISCORD_BOT_TOKEN} = process.env;
 const Discord = require('discord.js');
 const karma = require('./karma');
 const quip = require('./quip');
+const links = require('./links');
 
 const client = new Discord.Client();
 
 const isGivingKarmaRegex = /<@\!\w*>\s\++/g;
 const isCreatingKarmaQuip = /^\!quip\s/g;
+const isAddingLinkRegex =/\!link add/g;
+const isGettingLinksRegex = /^!links$/g;
 
 client.once('ready', () => {
   console.log('Ready!');
@@ -76,6 +79,25 @@ client.on('message', async (message: Message) => {
     await quip.createQuip(quipToCreate);
 
     message.channel.send('Created a quip!');
+  }
+
+  if (isAddingLinkRegex.test(content)) {
+    const [linkName, linkHref] = content.replace(isAddingLinkRegex, '')
+      .split(' ');
+
+    await links.createLink({
+      linkName,
+      linkHref,
+      guildId
+    });
+
+    message.channel.send('Created a link!');
+  }
+
+  if (isGettingLinksRegex.test(content)) {
+    const results = await links.getLinks({ guildId });
+
+    message.channel.send(results);
   }
 
   console.info('----------------------------------');
